@@ -3,7 +3,7 @@ name: Shopee Price Check
 on:
   schedule:
     # every 10 minutes
-    - cron: '*/10 * * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch:  # allow manual runs
 
 jobs:
