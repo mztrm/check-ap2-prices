@@ -4,9 +4,9 @@ from email.mime.text import MIMEText
 from datetime import datetime
 
 def send_email(price, url):
-    sender = os.environ["EMAIL_USER"]
-    password = os.environ["EMAIL_PASS"]
-    recipient = os.environ["EMAIL_USER"]
+    sender = os.environ["GMAIL_USER"]
+    password = os.environ["GMAIL_PASS"]
+    recipient = os.environ["TO_EMAIL"]
 
     msg = MIMEText(f"Test Alert!\n\nShopee item price: {price}\nLink: {url}")
     msg["Subject"] = "Shopee Price Alert (TEST)"
@@ -132,4 +132,5 @@ if __name__ == "__main__":
 
 # if __name__ == "__main__":
 #     main()
+
 
