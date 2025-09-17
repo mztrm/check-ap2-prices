@@ -3,7 +3,7 @@ name: Shopee Price Check
 on:
   schedule:
     # every 10 minutes
-    - cron: '*/30 * * * *'
+    - cron: '*/10 * * * *'
   workflow_dispatch:  # allow manual runs
 
 jobs:
@@ -13,17 +13,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download previous state artifact (if present)
+      - name: Download previous state (if present)
         uses: actions/download-artifact@v4
         with:
           name: state
           path: ./artifact_state
         continue-on-error: true
 
-      - name: If artifact exists, move to state.json
+      - name: Restore state.json if it exists
         run: |
           if [ -f ./artifact_state/state.json ]; then
             mv ./artifact_state/state.json ./state.json
+          else
+            echo '{}' > state.json
           fi
 
       - name: Set up Python
@@ -41,11 +43,11 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASS: ${{ secrets.GMAIL_PASS }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
-          PRICE_DIVISOR: ${{ secrets.PRICE_DIVISOR }}
+          PRICE_THRESHOLD: ${{ secrets.PRICE_THRESHOLD }}
         run: |
           python monitor.py
 
-      - name: Upload updated state
+      - name: Save updated state.json
         uses: actions/upload-artifact@v4
         with:
           name: state
